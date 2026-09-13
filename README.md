@@ -1,2 +1,3 @@
 # 3D-MODELLER
 Making computer graphics using Gabriel Gambetta's book on computer graphics from scratch, found on the repositry build-your-own-x.
+Currently worked on shadows, will be updating it as I progress on.
