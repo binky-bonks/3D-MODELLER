@@ -49,10 +49,10 @@ scene_lights = [
    directional_light(intensity=0.2, direction=vector(1,4,4))
 ]
 scene_spheres = [
-   sphere(centre=vector(0,-5001,0), radius=5000, color=(255,255,0), specular=1000, reflective=0),
-   sphere(centre=vector(0, -1, 3), radius=1, color=(255,0,0), specular=500, reflective=0),
-   sphere(centre=vector(2, 0, 4), radius=1, color=(0,0,255), specular=500, reflective=0),
-   sphere(centre=vector(-2,0,4), radius=1, color=(0,255,0), specular = 10, reflective=0)
+   sphere(centre=vector(0,-5001,0), radius=5000, color=(255,255,0), specular=1000, reflective=0.5),
+   sphere(centre=vector(0, -1, 3), radius=1, color=(255,0,0), specular=500, reflective=0.2),
+   sphere(centre=vector(2, 0, 4), radius=1, color=(0,0,255), specular=500, reflective=0.3),
+   sphere(centre=vector(-2,0,4), radius=1, color=(0,255,0), specular = 10, reflective=0.4)
 ]
 
 canvas_width = 500
