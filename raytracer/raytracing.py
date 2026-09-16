@@ -50,7 +50,7 @@ scene_lights = [
 ]
 scene_spheres = [
    sphere(centre=vector(0,-5001,0), radius=5000, color=(255,255,0), specular=1000, reflective=0.5),
-   sphere(centre=vector(0, -1, 3), radius=1, color=(255,0,0), specular=500, reflective=0.2),
+   sphere(centre=vector(0, -1, 3), radius=1, color=(255,0,0), specular=500, reflective=0.4),
    sphere(centre=vector(2, 0, 4), radius=1, color=(0,0,255), specular=500, reflective=0.3),
    sphere(centre=vector(-2,0,4), radius=1, color=(0,255,0), specular = 10, reflective=0.4)
 ]
@@ -127,7 +127,7 @@ def trace_ray(origin, direction, t_max, t_min, recursion_depth):
     closest_sphere, closest_t = closest_intersection(origin, direction, t_max, t_min)
     if closest_sphere == None:
        return bg_color
-    P = camera_origin + direction * closest_t
+    P = origin + direction * closest_t
     N = (P - closest_sphere.centre)
     N = vector.normalise(N)
     intensity = compute_lighting(P, N, vector.negative(direction), closest_sphere.specular)
@@ -141,9 +141,9 @@ def trace_ray(origin, direction, t_max, t_min, recursion_depth):
     #To compute reflected ray
     R = reflect_ray(vector.negative(direction), N)
     reflected_color = trace_ray(P, R, math.inf, 0.0001, recursion_depth=recursion_depth-1)
-    r = int(r * (1-reflectiveness) + (reflected_color[0] * reflectiveness))
-    b = int(b * (1-reflectiveness) + (reflected_color[1] * reflectiveness))
-    g = int(g * (1-reflectiveness) + (reflected_color[2] * reflectiveness))
-    return (r, g, b)
+    new_r = int(r * (1-reflectiveness) + (reflected_color[0] * reflectiveness))
+    new_g = int(g * (1-reflectiveness) + (reflected_color[1] * reflectiveness))
+    new_b = int(b * (1-reflectiveness) + (reflected_color[2] * reflectiveness))
+    return (new_r, new_g, new_b)
 if __name__ == "__main__":
       main()
