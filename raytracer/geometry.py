@@ -26,3 +26,8 @@ class vector:
        if length == 0:
           return vector(0,0,0)
        return vector(self.x/length, self.y/length, self.z/length)
+    def apply_rotation(self, matrix):
+       new_x = matrix[0][0]*self.x + matrix[0][1]*self.y + matrix[0][2]*self.z
+       new_y = matrix[1][0]*self.x + matrix[1][1]*self.y + matrix[1][2]*self.z
+       new_z = matrix[2][0]*self.x + matrix[2][1]*self.y + matrix[2][2]*self.z
+       return vector(new_x, new_y, new_z)

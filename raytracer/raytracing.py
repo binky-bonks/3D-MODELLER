@@ -2,7 +2,15 @@ from PIL import Image
 import math
 from geometry import vector
 #making this from gabriel gambetta's on comp. graphics
-    
+class camera:
+   def __init__(self, position, angle):
+      self.position = position
+      theta = math.radians(angle)
+      self.rotation = [
+         [math.cos(theta), 0, -math.sin(theta)],
+         [0,1,0],
+         [math.sin(theta), 0, math.cos(theta)]
+      ]
 class light:
    def __init__(self,intensity):
       self.intensity = float(intensity)
@@ -25,7 +33,7 @@ class sphere:
       self.specular = specular
       self.reflective = reflective
 
-camera_origin = vector(0.0 ,0.0 ,0.0)
+my_camera = camera(vector(2.4, 0.0, 1.0), angle=40)
 
 def main():
    img = Image.new("RGB", (canvas_width, canvas_height), bg_color)
@@ -33,9 +41,9 @@ def main():
 
    for cx in range(-canvas_width//2, canvas_width//2):
       for cy in range(-canvas_height//2, canvas_height//2):
-         direction = canvas_to_vp(cx, cy)
-         color = trace_ray(camera_origin, direction, t_max = math.inf , t_min = (1.0), recursion_depth=3)
-
+         raw_direction = (canvas_to_vp(cx, cy)) 
+         direction = vector.apply_rotation(raw_direction,my_camera.rotation)
+         color = trace_ray(my_camera.position, direction, t_max = math.inf , t_min = (1.0), recursion_depth=3)
          sx = (canvas_width//2) + cx
          sy = (canvas_height//2)-1-cy
          pixels[sx, sy] = color
