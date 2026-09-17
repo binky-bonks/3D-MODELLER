@@ -1,6 +1,7 @@
 from PIL import Image
 import math
 from geometry import vector
+from multiprocessing import Pool
 #making this from gabriel gambetta's on comp. graphics
 class camera:
    def __init__(self, position, angle):
@@ -38,19 +39,27 @@ my_camera = camera(vector(2.4, 0.0, 1.0), angle=40)
 def main():
    img = Image.new("RGB", (canvas_width, canvas_height), bg_color)
    pixels = img.load()
-
-   for cx in range(-canvas_width//2, canvas_width//2):
-      for cy in range(-canvas_height//2, canvas_height//2):
-         raw_direction = (canvas_to_vp(cx, cy)) 
-         direction = vector.apply_rotation(raw_direction,my_camera.rotation)
-         color = trace_ray(my_camera.position, direction, t_max = math.inf , t_min = (1.0), recursion_depth=3)
+   rows = range(-canvas_height//2, canvas_height//2)
+   with Pool() as pool:
+      results = pool.map(render_row, rows)
+   for cy, row_colors in results:
+      for i, cx in enumerate(range(-canvas_width//2, canvas_width//2)):
          sx = (canvas_width//2) + cx
          sy = (canvas_height//2)-1-cy
-         pixels[sx, sy] = color
+         pixels[sx, sy] = row_colors[i]
 
    img.show()
    img.save("raytracingstuff.png")
- 
+
+def render_row(cy):
+ row_colors = []
+ for cx in range(-canvas_width//2, canvas_width//2):
+   raw_direction = (canvas_to_vp(cx, cy)) 
+   direction = vector.apply_rotation(raw_direction,my_camera.rotation)
+   color = trace_ray(my_camera.position, direction, t_max = math.inf , t_min = (1.0), recursion_depth=3)
+   row_colors.append(color)
+ return cy, row_colors
+
 scene_lights = [
    ambient_light(intensity=0.2),
    point_light(intensity=0.6, position=vector(2,1,0)),
@@ -69,7 +78,6 @@ view_width = 1.0
 view_height = 1.0
 projection_plane_d = 1.0
 bg_color = (0,0,0)
-
 def canvas_to_vp(cx, cy):
    vx, vy = cx*(view_width/canvas_width), cy*(view_height/canvas_height)
    return vector(vx, vy, projection_plane_d)
